@@ -53,19 +53,37 @@ const Editor = {
         downloadTxtBtn: null,
         toggleCssBtn: null,
         customCssContainer: null,
-        customCssInput: null,
         applyCssBtn: null,
         closeCssBtn: null,
+        resetCssBtn: null,
         customStyleTag: null,
         buffer: null,
         showEditorBtn: null,
         showPreviewBtn: null,
         autosaveIndicator: null,
+        fontFamilySelect: null,
+        fontSearchInput: null,
+        fontSizeInput: null,
+        textColorInput: null,
+        boldColorInput: null,
+        italicColorInput: null,
+        headingColorInput: null,
+        showHeadingBorderCheckbox: null,
+        headingBorderColorInput: null,
+        headingBorderColorGroup: null,
+        linkColorInput: null,
+        bgColorInput: null,
+        codeTextColorInput: null,
+        codeBgColorInput: null,
+        lineHeightInput: null,
     },
     markdownItInstance: null,
     markedInstance: null,
     debouncedUpdate: null,
     autosaveTimer: null,
+    googleFonts: [
+        'ABeeZee', 'Abel', 'Abril Fatface', 'Aclonica', 'Acme', 'Actor', 'Adamina', 'Advent Pro', 'Aguafina Script', 'Akronim', 'Aladin', 'Aldrich', 'Alef', 'Alegreya', 'Alegreya SC', 'Alegreya Sans', 'Alegreya Sans SC', 'Alex Brush', 'Alfa Slab One', 'Alice', 'Alike', 'Alike Angular', 'Allan', 'Allerta', 'Allerta Stencil', 'Allura', 'Almendra', 'Almendra Display', 'Almendra SC', 'Amarante', 'Amaranth', 'Amatic SC', 'Amethysta', 'Amiri', 'Amita', 'Anaheim', 'Andada', 'Andika', 'Angkor', 'Annie Use Your Telescope', 'Anonymous Pro', 'Antic', 'Antic Didone', 'Antic Slab', 'Anton', 'Arapey', 'Arbutus', 'Arbutus Slab', 'Architects Daughter', 'Archivo', 'Archivo Black', 'Archivo Narrow', 'Arimo', 'Arizonia', 'Armata', 'Arsenal', 'Artifika', 'Arvo', 'Arya', 'Asap', 'Asap Condensed', 'Asar', 'Asset', 'Assistant', 'Astloch', 'Asul', 'Athiti', 'Atma', 'Atomic Age', 'Aubrey', 'Audiowide', 'Autour One', 'Average', 'Average Sans', 'Averia Gruesa Libre', 'Averia Libre', 'Averia Sans Libre', 'Averia Serif Libre', 'Bad Script', 'Bahiana', 'Baloo', 'Baloo Bhai', 'Baloo Bhaina', 'Baloo Chettan', 'Baloo Da', 'Baloo Paaji', 'Baloo Tamma', 'Baloo Tammudu', 'Baloo Thambi', 'Balthazar', 'Bangers', 'Barlow', 'Barlow Condensed', 'Barlow Semi Condensed', 'Barriecito', 'Barrio', 'Basic', 'Battambang', 'Baumans', 'Bayon', 'Belgrano', 'Belleza', 'BenchNine', 'Bentham', 'Berkshire Swash', 'Bevan', 'Bigelow Rules', 'Bigshot One', 'Bilbo', 'Bilbo Swash Caps', 'BioRhyme', 'BioRhyme Expanded', 'Biryani', 'Bitter', 'Black Han Sans', 'Black Ops One', 'Bokor', 'Bonbon', 'Boogaloo', 'Bowlby One', 'Bowlby One SC', 'Brawler', 'Bree Serif', 'Bubblegum Sans', 'Bubbler One', 'Buda', 'Buenard', 'Bungee', 'Bungee Hairline', 'Bungee Inline', 'Bungee Outline', 'Bungee Shade', 'Butcherman', 'Butterfly Kids', 'Cabin', 'Cabin Condensed', 'Cabin Sketch', 'Caesar Dressing', 'Cagliostro', 'Cairo', 'Calligraffitti', 'Cambay', 'Cambo', 'Candal', 'Cantarell', 'Cantata One', 'Cantora One', 'Capriola', 'Cardo', 'Carme', 'Carrois Gothic', 'Carrois Gothic SC', 'Carter One', 'Catamaran', 'Caudex', 'Caveat', 'Caveat Brush', 'Cedarville Cursive', 'Ceviche One', 'Changa', 'Changa One', 'Chango', 'Chathura', 'Chau Philomene One', 'Chela One', 'Chelsea Market', 'Chenla', 'Cherry Cream Soda', 'Cherry Swash', 'Chewy', 'Chicle', 'Chivo', 'Chonburi', 'Cinzel', 'Cinzel Decorative', 'Clicker Script', 'Coda', 'Coda Caption', 'Codystar', 'Coiny', 'Combo', 'Comfortaa', 'Coming Soon', 'Concert One', 'Condiment', 'Content', 'Contrail One', 'Convergence', 'Cookie', 'Copse', 'Corben', 'Cormorant', 'Cormorant Garamond', 'Cormorant Infant', 'Cormorant SC', 'Cormorant Unicase', 'Cormorant Upright', 'Courgette', 'Cousine', 'Coustard', 'Covered By Your Grace', 'Crafty Girls', 'Creepster', 'Crete Round', 'Crimson Text', 'Croissant One', 'Crushed', 'Cuprum', 'Cute Font', 'Cutive', 'Cutive Mono', 'Damion', 'Dancing Script', 'Dangrek', 'David Libre', 'Dawning of a New Day', 'Days One', 'Dekko', 'Delius', 'Delius Swash Caps', 'Delius Unicase', 'Della Respira', 'Denk One', 'Devonshire', 'Dhurjati', 'Didact Gothic', 'Diplomata', 'Diplomata SC', 'Domine', 'Donegal One', 'Doppio One', 'Dorsa', 'Dosis', 'Dr Sugiyama', 'Droid Sans', 'Droid Sans Mono', 'Droid Serif', 'Duru Sans', 'Dynalight', 'EB Garamond', 'Eagle Lake', 'Eater', 'Economica', 'Eczar', 'El Messiri', 'Electrolize', 'Elsie', 'Elsie Swash Caps', 'Emblema One', 'Emilys Candy', 'Encode Sans', 'Encode Sans Condensed', 'Encode Sans Expanded', 'Encode Sans Semi Condensed', 'Encode Sans Semi Expanded', 'Engagement', 'Englebert', 'Enriqueta', 'Erica One', 'Esteban', 'Euphoria Script', 'Ewert', 'Exo', 'Exo 2', 'Expletus Sans', 'Fanwood Text', 'Farsan', 'Fascinate', 'Fascinate Inline', 'Faster One', 'Fasthand', 'Fauna One', 'Faustina', 'Federant', 'Federo', 'Felipa', 'Fenix', 'Finger Paint', 'Fira Mono', 'Fira Sans', 'Fira Sans Condensed', 'Fira Sans Extra Condensed', 'Fjalla One', 'Fjord One', 'Flamenco', 'Flavors', 'Fondamento', 'Fontdiner Swanky', 'Forum', 'Francois One', 'Frank Ruhl Libre', 'Freckle Face', 'Fredericka the Great', 'Fredoka One', 'Freehand', 'Fresca', 'Frijole', 'Fruktur', 'Fugaz One', 'GFS Didot', 'GFS Neohellenic', 'Gabriela', 'Gafata', 'Galada', 'Galdeano', 'Galindo', 'Gentium Basic', 'Gentium Book Basic', 'Geo', 'Geostar', 'Geostar Fill', 'Germania One', 'Gidugu', 'Gilda Display', 'Give You Glory', 'Glass Antiqua', 'Glegoo', 'Gloria Hallelujah', 'Goblin One', 'Gochi Hand', 'Gorditas', 'Goudy Bookletter 1911', 'Graduate', 'Grand Hotel', 'Gravitas One', 'Great Vibes', 'Griffy', 'Gruppo', 'Gudea', 'Gurajada', 'Habibi', 'Halant', 'Hammersmith One', 'Hanalei', 'Hanalei Fill', 'Handlee', 'Hanuman', 'Happy Monkey', 'Harmattan', 'Headland One', 'Heebo', 'Henny Penny', 'Herr Von Muellerhoff', 'Hind', 'Hind Guntur', 'Hind Madurai', 'Hind Siliguri', 'Hind Vadodara', 'Holtwood One SC', 'Homemade Apple', 'Homenaje', 'IM Fell DW Pica', 'IM Fell DW Pica SC', 'IM Fell Double Pica', 'IM Fell Double Pica SC', 'IM Fell English', 'IM Fell English SC', 'IM Fell French Canon', 'IM Fell French Canon SC', 'IM Fell Great Primer', 'IM Fell Great Primer SC', 'Iceberg', 'Iceland', 'Imprima', 'Inconsolata', 'Inder', 'Indie Flower', 'Inika', 'Inknut Antiqua', 'Inter', 'Irish Grover', 'Istok Web', 'Italiana', 'Italianno', 'Itim', 'Jacques Francois', 'Jacques Francois Shadow', 'Jaldi', 'Jim Nightshade', 'Jockey One', 'Jolly Lodger', 'Jomhuria', 'Josefin Sans', 'Josefin Slab', 'Joti One', 'Judson', 'Julee', 'Julius Sans One', 'Junge', 'Jura', 'Just Another Hand', 'Just Me Again Down Here', 'Kadwa', 'Kalam', 'Kameron', 'Kanit', 'Kantumruy', 'Karla', 'Karma', 'Katibeh', 'Kaushan Script', 'Kavivanar', 'Kavoon', 'Kdam Thmor', 'Keania One', 'Kelly Slab', 'Kenia', 'Khand', 'Khmer', 'Khula', 'Kite One', 'Knewave', 'Kotta One', 'Koulen', 'Kranky', 'Kreon', 'Kristi', 'Krona One', 'Kumar One', 'Kumar One Outline', 'Kurale', 'La Belle Aurore', 'Laila', 'Lakki Reddy', 'Lalezar', 'Lancelot', 'Lateef', 'Lato', 'League Script', 'Leckerli One', 'Ledger', 'Lekton', 'Lemon', 'Lemonada', 'Libre Baskerville', 'Libre Barcode 128', 'Libre Barcode 128 Text', 'Libre Barcode 39', 'Libre Barcode 39 Extended', 'Libre Barcode 39 Extended Text', 'Libre Barcode 39 Text', 'Libre Franklin', 'Life Savers', 'Lilita One', 'Lily Script One', 'Limelight', 'Linden Hill', 'Lobster', 'Lobster Two', 'Londrina Outline', 'Londrina Shadow', 'Londrina Sketch', 'Londrina Solid', 'Lora', 'Love Ya Like A Sister', 'Loved by the King', 'Lovers Quarrel', 'Luckiest Guy', 'Lusitana', 'Lustria', 'Macondo', 'Macondo Swash Caps', 'Mada', 'Magra', 'Maiden Orange', 'Maitree', 'Mako', 'Mallanna', 'Mandali', 'Manuale', 'Marcellus', 'Marcellus SC', 'Marck Script', 'Margarine', 'Marko One', 'Marmelad', 'Martel', 'Martel Sans', 'Marvel', 'Mate', 'Mate SC', 'Maven Pro', 'McLaren', 'Meddon', 'MedievalSharp', 'Medula One', 'Meera Inimai', 'Megrim', 'Meie Script', 'Merienda', 'Merienda One', 'Merriweather', 'Merriweather Sans', 'Metal', 'Metal Mania', 'Metamorphous', 'Metrophobic', 'Michroma', 'Milonga', 'Miltonian', 'Miltonian Tattoo', 'Miniver', 'Miriam Libre', 'Mirza', 'Miss Fajardose', 'Mitr', 'Modak', 'Modern Antiqua', 'Mogra', 'Molengo', 'Molle', 'Monda', 'Monofett', 'Monoton', 'Monsieur La Doulaise', 'Montaga', 'Montez', 'Montserrat', 'Montserrat Alternates', 'Montserrat Subrayada', 'Moul', 'Moulpali', 'Mountains of Christmas', 'Mouse Memoirs', 'Mr Bedfort', 'Mr Dafoe', 'Mr De Haviland', 'Mrs Saint Delafield', 'Mrs Sheppards', 'Mukta', 'Mukta Mahee', 'Mukta Malar', 'Mukta Vaani', 'Muli', 'Mystery Quest', 'NTR', 'Neucha', 'Neuton', 'New Rocker', 'News Cycle', 'Niconne', 'Nixie One', 'Nobile', 'Nokora', 'Norican', 'Nosifer', 'Nothing You Could Do', 'Noticia Text', 'Noto Sans', 'Noto Serif', 'Nova Cut', 'Nova Flat', 'Nova Mono', 'Nova Oval', 'Nova Round', 'Nova Script', 'Nova Slim', 'Nova Square', 'Numans', 'Nunito', 'Nunito Sans', 'Odor Mean Chey', 'Offside', 'Old Standard TT', 'Oldenburg', 'Oleo Script', 'Oleo Script Swash Caps', 'Open Sans', 'Open Sans Condensed', 'Oranienbaum', 'Orbitron', 'Oregano', 'Orienta', 'Original Surfer', 'Oswald', 'Over the Rainbow', 'Overlock', 'Overlock SC', 'Overpass', 'Overpass Mono', 'Ovo', 'Oxygen', 'Oxygen Mono', 'PT Mono', 'PT Sans', 'PT Sans Caption', 'PT Sans Narrow', 'PT Serif', 'PT Serif Caption', 'Pacifico', 'Padauk', 'Palanquin', 'Palanquin Dark', 'Pangolin', 'Paprika', 'Parisienne', 'Passero One', 'Passion One', 'Pathway Gothic One', 'Patrick Hand', 'Patrick Hand SC', 'Pattaya', 'Patua One', 'Pavanam', 'Paytone One', 'Peddana', 'Peralta', 'Permanent Marker', 'Petit Formal Script', 'Petrona', 'Philosopher', 'Piedra', 'Pinyon Script', 'Pirata One', 'Plaster', 'Play', 'Playball', 'Playfair Display', 'Playfair Display SC', 'Podkova', 'Poiret One', 'Poller One', 'Poly', 'Pompiere', 'Pontano Sans', 'Poppins', 'Port Lligat Sans', 'Port Lligat Slab', 'Pragati Narrow', 'Prata', 'Preahvihear', 'Press Start 2P', 'Pridi', 'Princess Sofia', 'Prociono', 'Prompt', 'Prosto One', 'Proza Libre', 'Puritan', 'Purple Purse', 'Quando', 'Quantico', 'Quattrocento', 'Quattrocento Sans', 'Questrial', 'Quicksand', 'Quintessential', 'Qwigley', 'Racing Sans One', 'Radley', 'Rajdhani', 'Rakkas', 'Raleway', 'Raleway Dots', 'Ramabhadra', 'Ramaraja', 'Rambla', 'Rammetto One', 'Ranchers', 'Rancho', 'Ranga', 'Rasa', 'Rationale', 'Ravi Prakash', 'Redressed', 'Reem Kufi', 'Reenie Beanie', 'Revalia', 'Rhodium Libre', 'Ribeye', 'Ribeye Marrow', 'Righteous', 'Risque', 'Roboto', 'Roboto Condensed', 'Roboto Mono', 'Roboto Slab', 'Rochester', 'Rock Salt', 'Rokkitt', 'Romanesco', 'Ropa Sans', 'Rosario', 'Rosarivo', 'Rouge Script', 'Rozha One', 'Rubik', 'Rubik Mono One', 'Ruda', 'Rufina', 'Ruge Boogie', 'Ruluko', 'Rum Raisin', 'Ruslan Display', 'Russo One', 'Ruthie', 'Rye', 'Sacramento', 'Sahitya', 'Sail', 'Saira', 'Saira Condensed', 'Saira Extra Condensed', 'Saira Semi Condensed', 'Salsa', 'Sanchez', 'Sancreek', 'Sansita', 'Sarala', 'Sarina', 'Sarpanch', 'Satisfy', 'Scada', 'Scheherazade', 'Schoolbell', 'Scope One', 'Seaweed Script', 'Secular One', 'Sedgwick Ave', 'Sedgwick Ave Display', 'Sevillana', 'Seymour One', 'Shadows Into Light', 'Shadows Into Light Two', 'Shanti', 'Share', 'Share Tech', 'Share Tech Mono', 'Shojumaru', 'Short Stack', 'Shrikhand', 'Siemreap', 'Sigmar One', 'Signika', 'Signika Negative', 'Simonetta', 'Sintony', 'Sirin Stencil', 'Six Caps', 'Skranji', 'Slabo 13px', 'Slabo 27px', 'Slackey', 'Smokum', 'Smythe', 'Sniglet', 'Snippet', 'Snowburst One', 'Sofadi One', 'Sofia', 'Sonsie One', 'Sorts Mill Goudy', 'Source Code Pro', 'Source Sans Pro', 'Source Serif Pro', 'Space Mono', 'Special Elite', 'Spectral', 'Spectral SC', 'Spicy Rice', 'Spinnaker', 'Spirax', 'Squada One', 'Sree Krushnadevaraya', 'Sriracha', 'Stalemate', 'Stalinist One', 'Stardos Stencil', 'Stint Ultra Condensed', 'Stint Ultra Expanded', 'Stoke', 'Strait', 'Sue Ellen Francisco', 'Suez One', 'Sumana', 'Sunshiney', 'Supermercado One', 'Sura', 'Suranna', 'Suravaram', 'Suwannaphum', 'Swanky and Moo Moo', 'Syncopate', 'Tangerine', 'Taprom', 'Tauri', 'Taviraj', 'Teko', 'Telex', 'Tenali Ramakrishna', 'Tenor Sans', 'Text Me One', 'The Girl Next Door', 'Tienne', 'Tillana', 'Timmana', 'Tinos', 'Titan One', 'Titillium Web', 'Trade Winds', 'Trirong', 'Trocchi', 'Trochut', 'Trykker', 'Tulpen One', 'Ubuntu', 'Ubuntu Condensed', 'Ubuntu Mono', 'Ultra', 'Uncial Antiqua', 'Underdog', 'Unica One', 'UnifrakturCook', 'UnifrakturMaguntia', 'Unkempt', 'Unlock', 'Unna', 'VT323', 'Vampiro One', 'Varela', 'Varela Round', 'Vast Shadow', 'Vesper Libre', 'Vibur', 'Vidaloka', 'Viga', 'Voces', 'Volkhov', 'Vollkorn', 'Voltaire', 'Waiting for the Sunrise', 'Wallpoet', 'Walter Turncoat', 'Warnes', 'Wellfleet', 'Wendy One', 'Wire One', 'Work Sans', 'Yanone Kaffeesatz', 'Yantramanav', 'Yatra One', 'Yellowtail', 'Yeseva One', 'Yesteryear', 'Yrsa', 'Zeyada', 'Zilla Slab', 'Zilla Slab Highlight'
+    ],
 
     Init: function () {
         this.getElements();
@@ -76,6 +94,8 @@ const Editor = {
         this.setupEventListeners();
         this.initializeResponsiveUI();
         this.setupResizeHandle();
+        this.populateGoogleFonts();
+        this.setupFontSearch();
         this.setupAutosave();
         this.LoadFromLocalStorage();
         this.state.lastText = this.elements.textarea.value;
@@ -103,13 +123,30 @@ const Editor = {
         this.elements.downloadTxtBtn = document.getElementById("btn-download-txt");
         this.elements.toggleCssBtn = document.getElementById("btn-toggle-css");
         this.elements.customCssContainer = document.getElementById("custom-css-container");
-        this.elements.customCssInput = document.getElementById("custom-css-input");
         this.elements.applyCssBtn = document.getElementById("btn-apply-css");
         this.elements.closeCssBtn = document.getElementById("btn-close-css");
+        this.elements.resetCssBtn = document.getElementById("btn-reset-css");
         this.elements.customStyleTag = document.getElementById("custom-styles-output");
         this.elements.showEditorBtn = document.getElementById("btn-show-editor");
         this.elements.showPreviewBtn = document.getElementById("btn-show-preview");
         this.elements.autosaveIndicator = document.getElementById("autosave-indicator");
+        
+        // Style editor elements
+        this.elements.fontFamilySelect = document.getElementById("font-family-select");
+        this.elements.fontSearchInput = document.getElementById("font-search");
+        this.elements.fontSizeInput = document.getElementById("font-size-input");
+        this.elements.textColorInput = document.getElementById("text-color");
+        this.elements.boldColorInput = document.getElementById("bold-color");
+        this.elements.italicColorInput = document.getElementById("italic-color");
+        this.elements.headingColorInput = document.getElementById("heading-color");
+        this.elements.showHeadingBorderCheckbox = document.getElementById("show-heading-border");
+        this.elements.headingBorderColorInput = document.getElementById("heading-border-color");
+        this.elements.headingBorderColorGroup = document.getElementById("heading-border-color-group");
+        this.elements.linkColorInput = document.getElementById("link-color");
+        this.elements.bgColorInput = document.getElementById("bg-color");
+        this.elements.codeTextColorInput = document.getElementById("code-text-color");
+        this.elements.codeBgColorInput = document.getElementById("code-bg-color");
+        this.elements.lineHeightInput = document.getElementById("line-height-input");
 
         if (!this.elements.textarea || !this.elements.previewContent || !this.elements.previewPane) {
             console.error("Critical elements not found. Aborting initialization.");
@@ -226,7 +263,13 @@ const Editor = {
         this.elements.downloadTxtBtn.addEventListener('click', () => this.DownloadAs('txt'));
         this.elements.toggleCssBtn.addEventListener('click', this.ToggleCustomCSS.bind(this));
         this.elements.applyCssBtn.addEventListener('click', this.ApplyCustomCSS.bind(this));
+        this.elements.resetCssBtn.addEventListener('click', this.ResetStyles.bind(this));
         this.elements.closeCssBtn.addEventListener('click', this.ToggleCustomCSS.bind(this));
+        
+        // Toggle heading border color visibility
+        if (this.elements.showHeadingBorderCheckbox) {
+            this.elements.showHeadingBorderCheckbox.addEventListener('change', this.toggleHeadingBorderColorVisibility.bind(this));
+        }
     },
 
     initializeResponsiveUI: function () {
@@ -296,6 +339,100 @@ const Editor = {
         resizeHandle.addEventListener('mousedown', startResize);
         document.addEventListener('mousemove', resize);
         document.addEventListener('mouseup', stopResize);
+    },
+
+    populateGoogleFonts: function () {
+        const select = this.elements.fontFamilySelect;
+        if (!select) return;
+
+        // Clear existing options except system default and standard fonts
+        const standardFonts = `
+            <option value="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">System Default</option>
+            <option value="Arial, sans-serif">Arial</option>
+            <option value="'Times New Roman', Times, serif">Times New Roman</option>
+            <option value="'Courier New', Courier, monospace">Courier New</option>
+            <option value="Georgia, serif">Georgia</option>
+            <option value="Verdana, sans-serif">Verdana</option>
+            <option value="'Comic Sans MS', cursive">Comic Sans MS</option>
+            <option value="Impact, Charcoal, sans-serif">Impact</option>
+            <option value="'Trebuchet MS', sans-serif">Trebuchet MS</option>
+            <option value="'Arial Black', Gadget, sans-serif">Arial Black</option>
+            <option value="Tahoma, Geneva, sans-serif">Tahoma</option>
+            <option value="'Palatino Linotype', 'Book Antiqua', Palatino, serif">Palatino</option>
+            <option value="'Lucida Console', Monaco, monospace">Lucida Console</option>
+            <option value="'Lucida Sans Unicode', 'Lucida Grande', sans-serif">Lucida Sans</option>
+        `;
+        
+        select.innerHTML = standardFonts;
+
+        // Add separator
+        const separator = document.createElement('option');
+        separator.disabled = true;
+        separator.textContent = '─────── Google Fonts ───────';
+        select.appendChild(separator);
+
+        // Add all Google Fonts
+        this.googleFonts.forEach(font => {
+            const option = document.createElement('option');
+            option.value = `'${font}', sans-serif`;
+            option.textContent = font;
+            option.style.fontFamily = `'${font}', sans-serif`;
+            select.appendChild(option);
+        });
+    },
+
+    setupFontSearch: function () {
+        const searchInput = this.elements.fontSearchInput;
+        const select = this.elements.fontFamilySelect;
+        if (!searchInput || !select) return;
+
+        searchInput.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const options = select.querySelectorAll('option');
+
+            options.forEach(option => {
+                const fontName = option.textContent.toLowerCase();
+                if (fontName.includes(searchTerm)) {
+                    option.style.display = '';
+                } else {
+                    option.style.display = 'none';
+                }
+            });
+
+            // Auto-select first visible option if searching
+            if (searchTerm) {
+                const firstVisible = Array.from(options).find(opt => opt.style.display !== 'none');
+                if (firstVisible) {
+                    firstVisible.selected = true;
+                }
+            }
+        });
+
+        // Load font when selected
+        select.addEventListener('change', () => {
+            this.loadSelectedFont();
+        });
+    },
+
+    loadSelectedFont: function () {
+        const selectedValue = this.elements.fontFamilySelect.value;
+        if (!selectedValue || selectedValue.includes('apple-system')) return;
+
+        // Extract font name from the CSS value
+        const fontMatch = selectedValue.match(/'([^']+)'/);
+        if (!fontMatch) return;
+        
+        const fontName = fontMatch[1];
+        
+        // Check if font is already loaded
+        const existingLink = document.querySelector(`link[href*="${fontName.replace(/\s+/g, '+')}"]`);
+        if (existingLink) return;
+
+        // Load the font dynamically
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = `https://fonts.googleapis.com/css2?family=${fontName.replace(/\s+/g, '+')}:wght@400;700&display=swap`;
+        document.head.appendChild(link);
     },
 
     updateAutosaveIndicator: function () {
@@ -636,29 +773,165 @@ const Editor = {
     ToggleCustomCSS: function () {
         this.state.customCssVisible = !this.state.customCssVisible;
         this.elements.customCssContainer.style.display = this.state.customCssVisible ? 'flex' : 'none';
-        this.elements.toggleCssBtn.textContent = this.state.customCssVisible ? 'Hide CSS' : 'Custom CSS';
+        this.elements.toggleCssBtn.textContent = this.state.customCssVisible ? 'Hide Editor' : 'Style Editor';
 
         if (this.state.customCssVisible) {
-            try {
-                const savedCSS = localStorage.getItem('markdownEditorCustomCSS');
-                if (savedCSS && this.elements.customCssInput.value === '') {
-                    this.elements.customCssInput.value = savedCSS;
-                    this.elements.customStyleTag.innerHTML = savedCSS;
-                }
-            } catch (err) {
-                console.error("Error loading custom CSS:", err);
-            }
-            this.elements.customCssInput.focus();
+            this.LoadStyleSettings();
+            this.toggleHeadingBorderColorVisibility();
+        }
+    },
+
+    toggleHeadingBorderColorVisibility: function () {
+        if (this.elements.showHeadingBorderCheckbox && this.elements.headingBorderColorGroup) {
+            const isChecked = this.elements.showHeadingBorderCheckbox.checked;
+            this.elements.headingBorderColorGroup.style.display = isChecked ? 'flex' : 'none';
         }
     },
 
     ApplyCustomCSS: function () {
-        const css = this.elements.customCssInput.value;
+        const styles = {
+            fontFamily: this.elements.fontFamilySelect.value,
+            fontSize: this.elements.fontSizeInput.value + 'px',
+            textColor: this.elements.textColorInput.value,
+            boldColor: this.elements.boldColorInput.value,
+            italicColor: this.elements.italicColorInput.value,
+            headingColor: this.elements.headingColorInput.value,
+            showHeadingBorder: this.elements.showHeadingBorderCheckbox.checked,
+            headingBorderColor: this.elements.headingBorderColorInput.value,
+            linkColor: this.elements.linkColorInput.value,
+            bgColor: this.elements.bgColorInput.value,
+            codeTextColor: this.elements.codeTextColorInput.value,
+            codeBgColor: this.elements.codeBgColorInput.value,
+            lineHeight: this.elements.lineHeightInput.value,
+        };
+
+        const headingBorderStyle = styles.showHeadingBorder 
+            ? `border-bottom: 1px solid ${styles.headingBorderColor} !important;`
+            : 'border-bottom: none !important;';
+
+        const css = `
+            #preview-content {
+                font-family: ${styles.fontFamily} !important;
+                font-size: ${styles.fontSize} !important;
+                color: ${styles.textColor} !important;
+                background-color: ${styles.bgColor} !important;
+                line-height: ${styles.lineHeight} !important;
+            }
+            #preview-pane {
+                background-color: ${styles.bgColor} !important;
+            }
+            #preview-content strong,
+            #preview-content b {
+                color: ${styles.boldColor} !important;
+            }
+            #preview-content em,
+            #preview-content i {
+                color: ${styles.italicColor} !important;
+            }
+            #preview-content h1,
+            #preview-content h2,
+            #preview-content h3,
+            #preview-content h4,
+            #preview-content h5,
+            #preview-content h6 {
+                color: ${styles.headingColor} !important;
+                ${headingBorderStyle}
+            }
+            #preview-content a {
+                color: ${styles.linkColor} !important;
+            }
+            #preview-content :not(pre) > code,
+            #preview-content p code,
+            #preview-content li code,
+            #preview-content td code,
+            #preview-content h1 code,
+            #preview-content h2 code,
+            #preview-content h3 code,
+            #preview-content h4 code,
+            #preview-content h5 code,
+            #preview-content h6 code {
+                color: ${styles.codeTextColor} !important;
+                background-color: ${styles.codeBgColor} !important;
+            }
+            #preview-content pre {
+                background-color: ${styles.codeBgColor} !important;
+            }
+        `;
+
         this.elements.customStyleTag.innerHTML = css;
+        
         try {
-            localStorage.setItem('markdownEditorCustomCSS', css);
+            localStorage.setItem('markdownEditorStyles', JSON.stringify(styles));
         } catch (err) {
-            console.error("Error saving custom CSS:", err);
+            console.error("Error saving styles:", err);
+        }
+    },
+
+    ResetStyles: function () {
+        // Reset to default values
+        this.elements.fontFamilySelect.value = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif";
+        this.elements.fontSizeInput.value = "16";
+        this.elements.textColorInput.value = "#000000";
+        this.elements.boldColorInput.value = "#000000";
+        this.elements.italicColorInput.value = "#000000";
+        this.elements.headingColorInput.value = "#000000";
+        this.elements.showHeadingBorderCheckbox.checked = true;
+        this.elements.headingBorderColorInput.value = "#E5D0AC";
+        this.elements.linkColorInput.value = "#0366d6";
+        this.elements.bgColorInput.value = "#FEF9E1";
+        this.elements.codeTextColorInput.value = "#A31D1D";
+        this.elements.codeBgColorInput.value = "#F0EADC";
+        this.elements.lineHeightInput.value = "1.6";
+
+        // Clear search input
+        if (this.elements.fontSearchInput) {
+            this.elements.fontSearchInput.value = '';
+            // Show all fonts
+            const options = this.elements.fontFamilySelect.querySelectorAll('option');
+            options.forEach(opt => opt.style.display = '');
+        }
+
+        // Update visibility
+        this.toggleHeadingBorderColorVisibility();
+
+        // Clear custom styles
+        this.elements.customStyleTag.innerHTML = '';
+        
+        try {
+            localStorage.removeItem('markdownEditorStyles');
+        } catch (err) {
+            console.error("Error clearing styles:", err);
+        }
+    },
+
+    LoadStyleSettings: function () {
+        try {
+            const savedStyles = localStorage.getItem('markdownEditorStyles');
+            if (savedStyles) {
+                const styles = JSON.parse(savedStyles);
+                this.elements.fontFamilySelect.value = styles.fontFamily || "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif";
+                this.elements.fontSizeInput.value = parseInt(styles.fontSize) || 16;
+                this.elements.textColorInput.value = styles.textColor || "#000000";
+                this.elements.boldColorInput.value = styles.boldColor || "#000000";
+                this.elements.italicColorInput.value = styles.italicColor || "#000000";
+                this.elements.headingColorInput.value = styles.headingColor || "#000000";
+                this.elements.showHeadingBorderCheckbox.checked = styles.showHeadingBorder !== undefined ? styles.showHeadingBorder : true;
+                this.elements.headingBorderColorInput.value = styles.headingBorderColor || "#E5D0AC";
+                this.elements.linkColorInput.value = styles.linkColor || "#0366d6";
+                // Use bgColor if available, otherwise fall back to contentBgColor or paneBgColor from old versions
+                this.elements.bgColorInput.value = styles.bgColor || styles.contentBgColor || styles.paneBgColor || "#FEF9E1";
+                this.elements.codeTextColorInput.value = styles.codeTextColor || "#A31D1D";
+                this.elements.codeBgColorInput.value = styles.codeBgColor || "#F0EADC";
+                this.elements.lineHeightInput.value = styles.lineHeight || "1.6";
+
+                // Update visibility of heading border color
+                this.toggleHeadingBorderColorVisibility();
+
+                // Apply the saved styles
+                this.ApplyCustomCSS();
+            }
+        } catch (err) {
+            console.error("Error loading styles:", err);
         }
     },
 
@@ -918,12 +1191,26 @@ printContainer.querySelectorAll("h1").forEach(h => {
                 // We'll update the preview in Init after setting lastText
             }
 
-            const savedCSS = localStorage.getItem('markdownEditorCustomCSS');
-            if (savedCSS && this.elements.customStyleTag) {
-                this.elements.customStyleTag.innerHTML = savedCSS;
-                if (this.elements.customCssInput) {
-                    this.elements.customCssInput.value = savedCSS;
-                }
+            const savedStyles = localStorage.getItem('markdownEditorStyles');
+            if (savedStyles && this.elements.customStyleTag) {
+                const styles = JSON.parse(savedStyles);
+                this.elements.fontFamilySelect.value = styles.fontFamily || "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif";
+                this.elements.fontSizeInput.value = parseInt(styles.fontSize) || 16;
+                this.elements.textColorInput.value = styles.textColor || "#000000";
+                this.elements.boldColorInput.value = styles.boldColor || "#000000";
+                this.elements.italicColorInput.value = styles.italicColor || "#000000";
+                this.elements.headingColorInput.value = styles.headingColor || "#000000";
+                this.elements.showHeadingBorderCheckbox.checked = styles.showHeadingBorder !== undefined ? styles.showHeadingBorder : true;
+                this.elements.headingBorderColorInput.value = styles.headingBorderColor || "#E5D0AC";
+                this.elements.linkColorInput.value = styles.linkColor || "#0366d6";
+                // Use bgColor if available, otherwise fall back to contentBgColor or paneBgColor from old versions
+                this.elements.bgColorInput.value = styles.bgColor || styles.contentBgColor || styles.paneBgColor || "#FEF9E1";
+                this.elements.codeTextColorInput.value = styles.codeTextColor || "#A31D1D";
+                this.elements.codeBgColorInput.value = styles.codeBgColor || "#F0EADC";
+                this.elements.lineHeightInput.value = styles.lineHeight || "1.6";
+                
+                // Apply the styles
+                this.ApplyCustomCSS();
             }
         } catch (err) {
             console.error("Error loading from localStorage:", err);

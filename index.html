@@ -22,6 +22,11 @@
 
   <link rel="stylesheet" href="style.css">
 
+  <!-- Google Fonts - Dynamic loading for all fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link id="google-fonts-link" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Open+Sans:wght@400;700&family=Lato:wght@400;700&family=Montserrat:wght@400;700&family=Raleway:wght@400;700&family=Poppins:wght@400;700&family=Inter:wght@400;700&family=Playfair+Display:wght@400;700&display=swap">
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/markdown-it/13.0.1/markdown-it.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/markdown-it-footnote/3.0.3/markdown-it-footnote.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
@@ -126,7 +131,7 @@
 
 
         <div class="mobile-menu-section">
-          <button id="btn-toggle-css-mobile">Custom CSS</button>
+          <button id="btn-toggle-css-mobile">Style Editor</button>
         </div>
       </div>
     </div>
@@ -158,7 +163,7 @@
       </div>
 
 
-      <button id="btn-toggle-css">Custom CSS</button>
+      <button id="btn-toggle-css">Style Editor</button>
 
 
       <span id="autosave-indicator" class="autosave-indicator">Auto-saved</span>
@@ -286,11 +291,94 @@ This text tries to use features that might fail in less robust editors, especial
     <div class="resize-handle" id="resize-handle"></div>
     <div class="pane" id="preview-pane">
       <div id="custom-css-container">
-        <h4>Custom Preview CSS</h4>
-        <textarea id="custom-css-input"
-          placeholder="/* Add your CSS rules here */&#10;/* e.g., #preview-content { font-size: 18px; } */"></textarea>
+        <h4>Style Editor</h4>
+        <div id="style-editor-content">
+          <div class="style-group">
+            <label for="font-family-select">Font Family:</label>
+            <input type="text" id="font-search" placeholder="Search fonts..." autocomplete="off">
+            <select id="font-family-select" size="6">
+              <option value="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">System Default</option>
+              <option value="Arial, sans-serif">Arial</option>
+              <option value="'Times New Roman', Times, serif">Times New Roman</option>
+              <option value="'Courier New', Courier, monospace">Courier New</option>
+              <option value="Georgia, serif">Georgia</option>
+              <option value="Verdana, sans-serif">Verdana</option>
+              <option value="'Comic Sans MS', cursive">Comic Sans MS</option>
+              <option value="Impact, Charcoal, sans-serif">Impact</option>
+              <option value="'Trebuchet MS', sans-serif">Trebuchet MS</option>
+              <option value="'Arial Black', Gadget, sans-serif">Arial Black</option>
+              <option value="Tahoma, Geneva, sans-serif">Tahoma</option>
+              <option value="'Palatino Linotype', 'Book Antiqua', Palatino, serif">Palatino</option>
+              <option value="'Lucida Console', Monaco, monospace">Lucida Console</option>
+              <option value="'Lucida Sans Unicode', 'Lucida Grande', sans-serif">Lucida Sans</option>
+            </select>
+          </div>
+
+          <div class="style-group">
+            <label for="font-size-input">Font Size (px):</label>
+            <input type="number" id="font-size-input" min="10" max="24" value="16">
+          </div>
+
+          <div class="style-group">
+            <label for="text-color">Text Color:</label>
+            <input type="color" id="text-color" value="#000000">
+          </div>
+
+          <div class="style-group">
+            <label for="bold-color">Bold Text Color:</label>
+            <input type="color" id="bold-color" value="#000000">
+          </div>
+
+          <div class="style-group">
+            <label for="italic-color">Italic Text Color:</label>
+            <input type="color" id="italic-color" value="#000000">
+          </div>
+
+          <div class="style-group">
+            <label for="heading-color">Heading Color:</label>
+            <input type="color" id="heading-color" value="#000000">
+          </div>
+
+          <div class="style-group checkbox-group">
+            <label class="checkbox-label">
+              <input type="checkbox" id="show-heading-border" checked>
+              <span>Show Heading Underline</span>
+            </label>
+          </div>
+
+          <div class="style-group" id="heading-border-color-group">
+            <label for="heading-border-color">Heading Underline Color:</label>
+            <input type="color" id="heading-border-color" value="#E5D0AC">
+          </div>
+
+          <div class="style-group">
+            <label for="link-color">Link Color:</label>
+            <input type="color" id="link-color" value="#0366d6">
+          </div>
+
+          <div class="style-group">
+            <label for="bg-color">Background Color:</label>
+            <input type="color" id="bg-color" value="#FEF9E1">
+          </div>
+
+          <div class="style-group">
+            <label for="code-text-color">Code Text Color:</label>
+            <input type="color" id="code-text-color" value="#A31D1D">
+          </div>
+
+          <div class="style-group">
+            <label for="code-bg-color">Code Background:</label>
+            <input type="color" id="code-bg-color" value="#F0EADC">
+          </div>
+
+          <div class="style-group">
+            <label for="line-height-input">Line Height:</label>
+            <input type="number" id="line-height-input" min="1" max="3" step="0.1" value="1.6">
+          </div>
+        </div>
         <div id="custom-css-controls">
           <button id="btn-apply-css">Apply</button>
+          <button id="btn-reset-css">Reset</button>
           <button id="btn-close-css">Close</button>
         </div>
       </div>
