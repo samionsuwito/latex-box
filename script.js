@@ -75,6 +75,7 @@ const Editor = {
         this.debouncedUpdate = debounce(this.UpdatePreview.bind(this), this.config.debounceDelay);
         this.setupEventListeners();
         this.initializeResponsiveUI();
+        this.setupResizeHandle();
         this.setupAutosave();
         this.LoadFromLocalStorage();
         this.state.lastText = this.elements.textarea.value;
@@ -251,6 +252,50 @@ const Editor = {
         if (this.elements.autosaveIndicator) {
             this.updateAutosaveIndicator();
         }
+    },
+
+    setupResizeHandle: function () {
+        const resizeHandle = document.getElementById('resize-handle');
+        const editorPane = document.getElementById('editor-pane');
+        const previewPane = document.getElementById('preview-pane');
+        const container = document.querySelector('.container');
+
+        if (!resizeHandle || !editorPane || !previewPane || !container) return;
+
+        let isResizing = false;
+
+        const startResize = (e) => {
+            isResizing = true;
+            document.body.style.cursor = 'col-resize';
+            document.body.style.userSelect = 'none';
+        };
+
+        const stopResize = () => {
+            if (isResizing) {
+                isResizing = false;
+                document.body.style.cursor = '';
+                document.body.style.userSelect = '';
+            }
+        };
+
+        const resize = (e) => {
+            if (!isResizing) return;
+
+            const containerRect = container.getBoundingClientRect();
+            const offsetX = e.clientX - containerRect.left;
+            const containerWidth = containerRect.width;
+
+            // Calculate percentage (between 20% and 80% to prevent too small panes)
+            let percentage = (offsetX / containerWidth) * 100;
+            percentage = Math.max(20, Math.min(80, percentage));
+
+            editorPane.style.flex = `0 0 ${percentage}%`;
+            previewPane.style.flex = `1`;
+        };
+
+        resizeHandle.addEventListener('mousedown', startResize);
+        document.addEventListener('mousemove', resize);
+        document.addEventListener('mouseup', stopResize);
     },
 
     updateAutosaveIndicator: function () {

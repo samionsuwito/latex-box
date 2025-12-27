@@ -185,6 +185,23 @@ html {
     width: 100vw;
 }
 
+.resize-handle {
+    width: 5px;
+    background-color: #E5D0AC;
+    cursor: col-resize;
+    flex-shrink: 0;
+    position: relative;
+    transition: background-color 0.2s ease;
+}
+
+.resize-handle:hover {
+    background-color: #A31D1D;
+}
+
+.resize-handle:active {
+    background-color: #6D2323;
+}
+
 .pane {
     flex: 1;
     height: 100%;
@@ -661,6 +678,10 @@ input:focus {
     body,
     html {
         font-size: 14px;
+    }
+
+    .resize-handle {
+        display: none;
     }
 
     .mobile-toggle-buttons {
